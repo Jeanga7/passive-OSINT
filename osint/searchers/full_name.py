@@ -61,7 +61,7 @@ def search_full_name(full_name):
         except requests.exceptions.RequestException as e:
             print(f"❌ Error retrieving data from {result}: {e}")
             continue
-    
+        
     result = (
         f"📌 First name: {' '.join(full_name.split()[:-1])}\n"
         f"📌 Last name: {full_name.split()[-1]}\n"
