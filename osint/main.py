@@ -1,5 +1,7 @@
 import argparse
 
+from searchers.full_name import search_full_name
+
 def main():
     parser = argparse.ArgumentParser(description='Welcome to passive v1.0.0')
     parser.add_argument('-fn', type=str, help='Search with full-name')
@@ -13,9 +15,9 @@ def main():
         return
 
     if args.fn:
-        #result = appel de la fonction search full name
+        result = search_full_name(args.fn)
         # enregistrer les resultats dans un fichier
-        print("search with full name")
+        print("search with full name:", result)
     elif args.ip:
         #result = appel de la fonction Search with ip address
         # enregistrer les resultats dans un fichier
