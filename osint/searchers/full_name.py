@@ -44,10 +44,8 @@ def search_full_name(full_name):
                 phone_tag = soup.select_one(".aios-ai-phone")
 
             elif "remax.com" in result:
-                address_tag = soup.select_one(".d-address-link p, .d-text.d-header-office-address p")
-                phone_tag = soup.select(".d-text.d-bio-phone-numbers p")
-                if phone_tag:
-                    phone = ", ".join([tag.text.strip() for tag in phone_tags])
+                address = fetch_dynamic_data(result, ".d-address-link p, .d-text.d-header-office-address p")
+                phone = fetch_dynamic_data(result, ".d-text.d-bio-phone-numbers p")
             else:
                 address_tag = soup.select_one(".bi-address")
                 phone_tag = soup.select_one(".bi-phone")
@@ -77,9 +75,8 @@ def search_full_name(full_name):
     print(result)
     print("💾 Saved in result.txt")
 
-
-
-def fetch_dynamic_page(url, address_selectors, phone_selectors):
+def fetch_dynamic_data(url, css_selector):
+    """Récupère la première valeur trouvée correspondant à un sélecteur CSS sur une page dynamique."""
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
@@ -88,29 +85,19 @@ def fetch_dynamic_page(url, address_selectors, phone_selectors):
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
-    address, phone = "Address not found", "Number not found"
+    result = "Not found"
 
     try:
         driver.get(url)
         time.sleep(5)  # Attendre que la page se charge
 
-        # 🔎 Chercher l'adresse en testant plusieurs classes
-        for selector in address_selectors:
-            elements = driver.find_elements(By.CSS_SELECTOR, selector)
-            if elements:
-                address = elements[0].text.strip()
-                break  # On arrête dès qu'on trouve une valeur
-
-        # 🔎 Chercher le téléphone en testant plusieurs classes
-        for selector in phone_selectors:
-            elements = driver.find_elements(By.CSS_SELECTOR, selector)
-            if elements:
-                phone = elements[0].text.strip()
-                break  # On arrête dès qu'on trouve une valeur
+        element = driver.find_elements(By.CSS_SELECTOR, css_selector)
+        if element:
+            result = element[0].text.strip()
 
     except Exception as e:
-        print(f"❌ Error retrieving dynamic content from {url}: {e}")
+        print(f"❌ Error retrieving data from {url}: {e}")
     finally:
         driver.quit()
 
-    return address, phone
+    return result
