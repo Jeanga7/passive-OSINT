@@ -1,6 +1,6 @@
 import argparse
 
-from searchers.full_name import search_full_name
+from searchers.full_name.search_engine import search_full_name
 
 def main():
     parser = argparse.ArgumentParser(description='Welcome to passive v1.0.0')
