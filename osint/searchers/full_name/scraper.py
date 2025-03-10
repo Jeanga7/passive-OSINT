@@ -4,12 +4,12 @@ def fetch_static_data(url, session):
     try:
         response = session.get(url, timeout=15)
         if response.status_code != 200:
-            return {"address": "Not found", "phone": "Not found"}
+            return {"address": "Address not found", "phone": "Phone not found"}
         
         soup = BeautifulSoup(response.content, 'html.parser')
         
         selectors = {
-            "address": ["address", ".address", ".location", "[itemprop='address']", ".contact-info p"],
+            "address": ["address", ".address", ".location", "[itemprop='address']", ".contact-info p", "[itemprop='homeLocation']", ".p-label", ".history p"],
             "phone": [".phone", "[itemprop='telephone']", "a[href^='tel:']", ".contact-info a"]
         }
         
@@ -20,9 +20,10 @@ def fetch_static_data(url, session):
                 if element:
                     data[key] = element.text.strip()
                     break
-            data.setdefault(key, "Not found")
+            if key not in data:
+                data[key] = f"{key.capitalize()} not found"
         
         return data
     except Exception as e:
         print(f"❌ Error retrieving static data from {url}: {str(e)}")
-        return {"address": "Not found", "phone": "Not found"}
+        return {"address": "Address not found", "phone": "Phone not found"}

@@ -10,11 +10,11 @@ def search_full_name(full_name):
     search_results = list(search(query, num_results=10))
     
     address = "Address not found"
-    phone = "Number not found"
+    phone = "Phone not found"
 
     session = get_session()
     
-    dynamic_sites = ['remax.com', 'realtor.com', 'zillow.com', 'trulia.com', 'homes.com']
+    dynamic_sites = ['remax.com', 'realtor.com', 'zillow.com', 'trulia.com', 'homes.com', 'beenverified.com']
     
     for result in search_results:
         print(f"Analyzing {result}")
@@ -32,7 +32,7 @@ def search_full_name(full_name):
         if data.get('phone'):
             phone = data['phone']
         
-        if address != "Address not found" and phone != "Number not found":
+        if address != "Address not found" and phone != "Phone not found":
             break
     
     result_text = (

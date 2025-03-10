@@ -17,7 +17,7 @@ def main():
     if args.fn:
         result = search_full_name(args.fn)
         # enregistrer les resultats dans un fichier
-        print("search with full name:", result)
+        print("\n\nsearch with full name:\n", result)
     elif args.ip:
         #result = appel de la fonction Search with ip address
         # enregistrer les resultats dans un fichier
