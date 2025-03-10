@@ -1,6 +1,7 @@
 import argparse
 
 from utils.utils import save_result_to_file
+from searchers.username.username import search_username
 from searchers.ip_lookup.ip_lookup import search_ip_address
 from searchers.full_name.search_engine import search_full_name
 
@@ -25,9 +26,9 @@ def main():
         print("\n\n", result)
         save_result_to_file(result)
     else:
-        #result = appel de la fonction Search with username
-        # enregistrer les resultats dans un fichier
-        print("Search with username")
+        result = search_username(args.u)
+        print("\n\n", result)
+        save_result_to_file(result)
     
 
 
