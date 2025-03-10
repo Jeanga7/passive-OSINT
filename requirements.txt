@@ -3,3 +3,4 @@ selenium
 webdriver-manager
 googlesearch-python
 fake_useragent
+Flask

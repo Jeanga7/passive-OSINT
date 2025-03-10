@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Search Tool</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/loupe.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <span>🕵️</span>
+            <h1>Passive Search Tool v1.0.0</h1>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="username">Recherche par Username</div>
+            <div class="tab" data-tab="fullname">Recherche par Nom Complet</div>
+            <div class="tab" data-tab="ip">Recherche par IP</div>
+        </div>
+        
+        <div class="tab-content active" id="username-tab">
+            <form id="username-form">
+                <label for="username">Nom d'utilisateur :</label>
+                <input type="text" id="username" name="username" placeholder="Ex: johndoe123" required>
+                <button type="submit">Rechercher 🔍</button>
+            </form>
+        </div>
+        
+        <div class="tab-content" id="fullname-tab">
+            <form id="fullname-form">
+                <label for="fullname">Nom complet :</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Ex: John Doe" required>
+                <button type="submit">Rechercher 🔍</button>
+            </form>
+        </div>
+        
+        <div class="tab-content" id="ip-tab">
+            <form id="ip-form">
+                <label for="ip">Adresse IP :</label>
+                <input type="text" id="ip" name="ip" placeholder="Ex: 8.8.8.8" required>
+                <button type="submit">Rechercher 🔍</button>
+            </form>
+        </div>
+        
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Recherche en cours, veuillez patienter...</p>
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        <div class="result" id="search-result"></div>
+        <button class="download-btn" id="download-btn">Télécharger les résultats 💾</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
