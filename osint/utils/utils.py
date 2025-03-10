@@ -1,5 +1,6 @@
 import random
 import requests
+import os
 from fake_useragent import UserAgent
 
 def get_random_user_agent():
@@ -30,3 +31,20 @@ def get_session():
         'User-Agent': get_random_user_agent()
     })
     return session
+
+def save_result_to_file(result_text, base_filename="result.txt"):
+    # Séparation du nom et de l'extension
+    name_part, ext_part = os.path.splitext(base_filename)
+    
+    filename = base_filename
+    counter = 1
+    
+    while os.path.exists(filename):
+        counter += 1
+        filename = f"{name_part}{counter}{ext_part}"
+    
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(result_text)
+    
+    print(f"💾 Saved in {filename}")
+    return filename

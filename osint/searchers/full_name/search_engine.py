@@ -41,9 +41,4 @@ def search_full_name(full_name):
         f"📍 Address: {address}\n"
         f"📞 Number: {phone}\n"
     )
-    
-    with open("result.txt", "w", encoding="utf-8") as file:
-        file.write(result_text)
-    
-    print("💾 Saved in result.txt")
     return result_text
