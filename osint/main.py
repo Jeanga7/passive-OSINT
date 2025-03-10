@@ -1,6 +1,7 @@
 import argparse
 
 from utils.utils import save_result_to_file
+from searchers.ip_lookup.ip_lookup import search_ip_address
 from searchers.full_name.search_engine import search_full_name
 
 def main():
@@ -20,9 +21,9 @@ def main():
         print("\n\n", result)
         save_result_to_file(result)
     elif args.ip:
-        #result = appel de la fonction Search with ip address
-        # enregistrer les resultats dans un fichier
-        print("Search with ip address")
+        result = search_ip_address(args.ip)
+        print("\n\n", result)
+        save_result_to_file(result)
     else:
         #result = appel de la fonction Search with username
         # enregistrer les resultats dans un fichier

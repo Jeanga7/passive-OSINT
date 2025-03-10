@@ -6,6 +6,10 @@ from .dynamic_scraper import fetch_dynamic_data
 from utils.utils import get_session
 
 def search_full_name(full_name):
+    """
+    Recherche des informations liées au nom complet d'une personne.
+    Retourne l'address et le numero de téléphone de la personne.
+    """
     query = f'"{full_name}" address phone'
     search_results = list(search(query, num_results=10))
     
