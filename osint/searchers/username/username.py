@@ -40,10 +40,6 @@ SOCIAL_NETWORKS = {
         "url": "https://medium.com/@{}",
         "verification": lambda r: "404" not in r.text
     },
-    "Twitch": {
-        "url": "https://www.twitch.tv/{}",
-        "verification": lambda r: not "Sorry. Unless you've got a time machine" in r.text
-    },
     "Snapchat": {
         "url": "https://www.snapchat.com/add/{}",
         "verification": lambda r: "snapcode-img" in r.text
@@ -59,27 +55,28 @@ RED = "\033[91m"
 RESET = "\033[0m"
 
 def search_username(username):
-    """Recherche un username sur plusieurs réseaux sociaux avec une vérification améliorée"""
+    """Recherche un username sur plusieurs réseaux sociaux"""
+
     found_networks = []
     session = get_session()
     
-    for network, info in SOCIAL_NETWORKS.items():
+    for url, info in SOCIAL_NETWORKS.items():
         profile_url = info["url"].format(username)
         verification_func = info["verification"]
         
         try:
-            print(f"🔍 Analyse de {network}...", end="\r")
+            print(f"🔍 Analyse de {url}...", end="\r")
 
             time.sleep(1)
             response = session.get(profile_url, timeout=10)
             
             if response.status_code == 200 and verification_func(response):
-                found_networks.append(f"✅ {network}: {GREEN}YES{RESET} {profile_url}")
+                found_networks.append(f"✅ {url}: {GREEN}YES{RESET} {profile_url}")
             else:
-                found_networks.append(f"❌ {network}: {RED}NO{RESET} {profile_url}")
+                found_networks.append(f"❌ {url}: {RED}NO{RESET} {profile_url}")
                 
         except requests.RequestException as e:
-            found_networks.append(f"❌ {network}: {RED}NO (Error: {str(e)[:30]}...){RESET} {profile_url}")
+            found_networks.append(f"❌ {url}: {RED}NO (Error: {str(e)[:30]}...){RESET} {profile_url}")
     
     result_message = f"\n🎯 Résultat pour '{username}':\n\n"
     result_message += "\n".join(found_networks)
