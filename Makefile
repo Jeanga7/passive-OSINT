@@ -1,4 +1,4 @@
-GITHUB_TOKEN ?= $(shell prGITHUB_TOKENintenv )
+GITHUB_TOKEN ?= $(shell printenv GITHUB_TOKEN)
 MESSAGE ?= $(shell printenv MESSAGE)
 
 config:

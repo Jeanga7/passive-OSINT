@@ -8,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from utils.utils import get_random_user_agent
 import time
 
-def fetch_dynamic_data(url):
+def fetch_dynamic_data(url, mode="default"):
     chrome_options = Options()
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--disable-gpu")
@@ -20,7 +20,7 @@ def fetch_dynamic_data(url):
     
     # chrome_options.binary_location = "/snap/bin/chromium"
 
-    result = {"address": "Address not found", "phone": "Phone not found"}
+    result = {"address": "Address not found", "phone": "Phone not found", "status": "unknown"}
     
     try:
         #service = Service(ChromeDriverManager().install())
@@ -34,41 +34,49 @@ def fetch_dynamic_data(url):
         driver.get(url)
         
         WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        
         time.sleep(2)
         
-        selectors = {
-            "address": [
-                ".d-address-link p", 
-                ".contact-address", 
-                ".address", 
-                "[itemprop='address']", 
-                ".d-text.d-header-office-address p",
-                ".location-text",
-                ".vcard-detail [itemprop='homeLocation'] span",
-                "span.address",
-                ".contact-info .location"
-            ],
-            "phone": [
-                ".contact-phone", 
-                ".phone", 
-                "[itemprop='telephone']", 
-                "a[href^='tel:']",
-                ".phone-number",
-                "span[data-phone]"
-            ]
-        }
-        
-        for key, paths in selectors.items():
-            for path in paths:
-                try:
-                    elements = driver.find_elements(By.CSS_SELECTOR, path)
-                    if elements and elements[0].text.strip():
-                        result[key] = elements[0].text.strip()
+        if mode == "instagram":
+            try:
+                spans = driver.find_elements(By.TAG_NAME, "span")
+                for span in spans:
+                    if "Sorry, this page isn't available." in span.text:
+                        result["status"] = "not found"
                         break
-                except Exception as e:
-                    print(f"Erreur avec le sélecteur {path}: {str(e)}")
-                    continue
+            except Exception as e:
+                print(f"Erreur lors de la vérification d'Instagram: {str(e)}")
+        else:
+            selectors = {
+                "address": [
+                    ".d-address-link p", 
+                    ".contact-address", 
+                    ".address", 
+                    "[itemprop='address']", 
+                    ".d-text.d-header-office-address p",
+                    ".location-text",
+                    ".vcard-detail [itemprop='homeLocation'] span",
+                    "span.address",
+                    ".contact-info .location"
+                ],
+                "phone": [
+                    ".contact-phone", 
+                    ".phone", 
+                    "[itemprop='telephone']", 
+                    "a[href^='tel:']",
+                    ".phone-number",
+                    "span[data-phone]"
+                ]
+            }
+            for key, paths in selectors.items():
+                for path in paths:
+                    try:
+                        elements = driver.find_elements(By.CSS_SELECTOR, path)
+                        if elements and elements[0].text.strip():
+                            result[key] = elements[0].text.strip()
+                            break
+                    except Exception as e:
+                        print(f"Erreur avec le sélecteur {path}: {str(e)}")
+                        continue
         
         if result["address"] == "Address not found":
             try:
