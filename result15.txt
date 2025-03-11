@@ -1,4 +1,0 @@
-📌 First name: Jean
-📌 Last name: Dupont
-📍 Address: Address not found
-📞 Number: Phone not found
