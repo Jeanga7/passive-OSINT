@@ -1,9 +1,6 @@
-// Configuration de l'API
 const API_URL = '/api/search';
 
-// Attendre que le DOM soit entièrement chargé
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestion des onglets
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
     
@@ -11,30 +8,25 @@ document.addEventListener('DOMContentLoaded', function() {
         tab.addEventListener('click', () => {
             const tabId = tab.getAttribute('data-tab');
             
-            // Activer l'onglet
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             
-            // Afficher le contenu de l'onglet
             tabContents.forEach(content => content.classList.remove('active'));
             document.getElementById(`${tabId}-tab`).classList.add('active');
             
-            // Cacher les résultats précédents
             document.getElementById('search-result').style.display = 'none';
             document.getElementById('download-btn').style.display = 'none';
             document.getElementById('error-message').style.display = 'none';
         });
     });
     
-    // Fonction pour effectuer une recherche via l'API
     async function performSearch(type, query) {
-        // Afficher le chargement
         document.querySelector('.loading').style.display = 'block';
         document.getElementById('search-result').style.display = 'none';
         document.getElementById('download-btn').style.display = 'none';
         document.getElementById('error-message').style.display = 'none';
         
-        // Construire l'URL avec les paramètres de requête selon le type
+        
         let searchUrl = API_URL;
         if (type === 'username') {
             searchUrl += `?u=${encodeURIComponent(query)}`;
@@ -45,27 +37,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         try {
-            // Effectuer la requête API
             const response = await fetch(searchUrl);
             const data = await response.json();
             
-            // Masquer le chargement
             document.querySelector('.loading').style.display = 'none';
             
             if (data.error) {
-                // Afficher l'erreur
                 const errorElement = document.getElementById('error-message');
                 errorElement.textContent = data.error;
                 errorElement.style.display = 'block';
                 return;
             }
             
-            // Formater et afficher les résultats
             const resultElement = document.getElementById('search-result');
             
-            // Traitement spécial pour la recherche de nom d'utilisateur (coloration)
             if (type === 'username') {
                 let formattedResult = data.result;
+
+                formattedResult = formattedResult.replace(/\x1B\[[0-9;]*m/g, "");
+                
                 // Remplacer les lignes avec YES en vert
                 formattedResult = formattedResult.replace(/✅.*YES/g, match => 
                     `<span class="found">${match}</span>`);
@@ -73,10 +63,76 @@ document.addEventListener('DOMContentLoaded', function() {
                 formattedResult = formattedResult.replace(/❌.*NO/g, match => 
                     `<span class="not-found">${match}</span>`);
                 
+                formattedResult = formattedResult.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+
                 resultElement.innerHTML = formattedResult;
-            } else {
-                // Pour les autres types de recherche, afficher tel quel
-                resultElement.textContent = data.result;
+            } else if (type === "fullname"){
+                const rawResult = data.result;
+
+                const addressMatch = rawResult.match(/Address:\s*(.*)/);
+                const numberMatch = rawResult.match(/Number:\s*(.*)/);
+
+                const address = addressMatch ? addressMatch[1] : '';
+                const number = numberMatch ? numberMatch[1] : '';
+
+                const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}`;
+
+                let formattedResult = rawResult;
+
+                if (address) {
+                    formattedResult = formattedResult.replace(address, `<a href="${mapUrl}" target="_blank">${address}</a>`);
+                }
+
+                if (number) {
+                    formattedResult = formattedResult.replace(number, `<a href="tel:${number}">${number}</a>`);
+                }
+
+                resultElement.innerHTML = formattedResult;
+            }else{
+                const rawResult = data.result;  
+
+                const ipMatch = rawResult.match(/IP Address:\s*(\S+)/);
+                const cityMatch = rawResult.match(/City:\s*(.*)/);
+                const countryMatch = rawResult.match(/Country:\s*(.*)/);
+                const ispMatch = rawResult.match(/ISP:\s*(.*)/);
+                const latLonMatch = rawResult.match(/City Lat\/Lon:\s*\(([-+]?\d*\.\d+)\)\/\(([-+]?\d*\.\d+)\)/);
+
+                const ip = ipMatch ? ipMatch[1] : '';
+                const city = cityMatch ? cityMatch[1] : '';
+                const country = countryMatch ? countryMatch[1] : '';
+                const isp = ispMatch ? ispMatch[1] : '';
+                const lat = latLonMatch ? latLonMatch[1] : ''; 
+                const lon = latLonMatch ? latLonMatch[2] : ''; 
+
+                const ipUrl = `https://ipinfo.io/${encodeURIComponent(ip)}`;
+                const cityUrl = `https://www.google.com/maps?q=${encodeURIComponent(city)}`;
+                const countryUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(country)}`;
+                const ispUrl = `https://www.${encodeURIComponent(isp.toLowerCase())}.com`;
+                const latLonUrl = `https://www.google.com/maps?q=${encodeURIComponent(lat)},${encodeURIComponent(lon)}`;
+
+                let formattedResult = rawResult;
+
+                if (ip) {
+                    formattedResult = formattedResult.replace(ip, `<a href="${ipUrl}" target="_blank">${ip}</a>`);
+                }
+
+                if (city) {
+                    formattedResult = formattedResult.replace(city, `<a href="${cityUrl}" target="_blank">${city}</a>`);
+                }
+
+                if (country) {
+                    formattedResult = formattedResult.replace(country, `<a href="${countryUrl}" target="_blank">${country}</a>`);
+                }
+
+                if (isp) {
+                    formattedResult = formattedResult.replace(isp, `<a href="${ispUrl}" target="_blank">${isp}</a>`);
+                }
+
+                if (lat && lon) {
+                    formattedResult = formattedResult.replace(`(${lat})/(${lon})`, `<a href="${latLonUrl}" target="_blank">${lat}/${lon}</a>`);
+                }
+
+                resultElement.innerHTML = formattedResult; 
             }
             
             resultElement.style.display = 'block';
@@ -84,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             return data.result;
         } catch (error) {
-            // Gérer les erreurs
             document.querySelector('.loading').style.display = 'none';
             const errorElement = document.getElementById('error-message');
             errorElement.textContent = "Erreur de connexion à l'API. Assurez-vous que le serveur est en cours d'exécution.";
@@ -93,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Gestion des formulaires
     document.getElementById('username-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('username').value;
@@ -112,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
         await performSearch('ip', ip);
     });
     
-    // Téléchargement des résultats
     document.getElementById('download-btn').addEventListener('click', () => {
         const result = document.getElementById('search-result').innerText;
         const blob = new Blob([result], { type: 'text/plain' });

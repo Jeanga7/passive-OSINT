@@ -10,48 +10,49 @@
 <body>
     <div class="container">
         <div class="logo">
-            <span>🕵️</span>
+            <!-- <span>🕵️</span> -->
+            <img src="{{ url_for('static', filename='img/searcher.png') }}" alt="Logo">
             <h1>Passive Search Tool v1.0.0</h1>
         </div>
         
         <div class="tabs">
-            <div class="tab active" data-tab="username">Recherche par Username</div>
-            <div class="tab" data-tab="fullname">Recherche par Nom Complet</div>
-            <div class="tab" data-tab="ip">Recherche par IP</div>
+            <div class="tab active" data-tab="username">Search by Username</div>
+            <div class="tab" data-tab="fullname">Search by Full Name</div>
+            <div class="tab" data-tab="ip">Search by IP address</div>
         </div>
         
         <div class="tab-content active" id="username-tab">
             <form id="username-form">
-                <label for="username">Nom d'utilisateur :</label>
-                <input type="text" id="username" name="username" placeholder="Ex: johndoe123" required>
-                <button type="submit">Rechercher 🔍</button>
+                <label for="username">Username :</label>
+                <input type="text" id="username" name="username" placeholder="Ex: Jeanga7" required>
+                <button type="submit">Search for 🔍</button>
             </form>
         </div>
         
         <div class="tab-content" id="fullname-tab">
             <form id="fullname-form">
-                <label for="fullname">Nom complet :</label>
-                <input type="text" id="fullname" name="fullname" placeholder="Ex: John Doe" required>
-                <button type="submit">Rechercher 🔍</button>
+                <label for="fullname">Full name :</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Ex: Jean Dupont" required>
+                <button type="submit">Search for 🔍</button>
             </form>
         </div>
         
         <div class="tab-content" id="ip-tab">
             <form id="ip-form">
-                <label for="ip">Adresse IP :</label>
+                <label for="ip">IP address :</label>
                 <input type="text" id="ip" name="ip" placeholder="Ex: 8.8.8.8" required>
-                <button type="submit">Rechercher 🔍</button>
+                <button type="submit">Search for 🔍</button>
             </form>
         </div>
         
         <div class="loading">
             <div class="spinner"></div>
-            <p>Recherche en cours, veuillez patienter...</p>
+            <p>Research in progress, please wait...</p>
         </div>
         
         <div class="error" id="error-message"></div>
         <div class="result" id="search-result"></div>
-        <button class="download-btn" id="download-btn">Télécharger les résultats 💾</button>
+        <button class="download-btn" id="download-btn">Download results 💾</button>
     </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
