@@ -36,11 +36,11 @@ def fetch_dynamic_data(url, mode="default"):
         WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
         time.sleep(2)
         
-        if mode == "instagram":
+        if mode == "instagram" or mode == "threads":
             try:
                 spans = driver.find_elements(By.TAG_NAME, "span")
                 for span in spans:
-                    if "Sorry, this page isn't available." in span.text:
+                    if "Sorry, this page isn't available" in span.text:
                         result["status"] = "not found"
                         break
             except Exception as e:

@@ -24,7 +24,7 @@ SOCIAL_NETWORKS = {
     },
     "Threads": {
         "url": "https://www.threads.net/@{}",
-        "verification": lambda r: not ("Page not found" in r.text or "Page not available" in r.text)
+        "verification": lambda r: not verify_threads(r)
     },
     "LinkedIn": {
         "url": "https://www.linkedin.com/in/{}",
@@ -59,6 +59,11 @@ RESET = "\033[0m"
 def verify_instagram(url):
     response = fetch_dynamic_data(url, mode="instagram")
     return response["status"] == "not found"
+
+def verify_threads(url):
+    response = fetch_dynamic_data(url, mode="threads")
+    return response["status"] == "not found"
+
 def search_username(username):
     """Recherche un username sur plusieurs réseaux sociaux"""
 
@@ -75,6 +80,8 @@ def search_username(username):
             time.sleep(1)
             response = session.get(profile_url, timeout=10)
             if 'instagram' in profile_url:
+                exists = verification_func(profile_url)
+            elif 'threads' in profile_url:
                 exists = verification_func(profile_url)
             else:
                 response = session.get(profile_url, timeout=10)
