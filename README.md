@@ -5,8 +5,8 @@ L'information est la clé de toute attaque ou défense en cybersécurité. L'un 
 
 Le but de cet outil est de vous aider à effectuer une collecte d'informations en utilisant des techniques OSINT (*Open Source Intelligence*). Il vous permettra d'effectuer des recherches sur :
 
-- 📌 **Nom complet** : Recherche de l'adresse et du numéro de téléphone dans les annuaires publics.
-- 🌍 **Adresse IP** : Identification de l'ISP et de la localisation approximative.
+- 📌 **Nom complet** : Recherche de l'adresse et du numéro de téléphone dans les annuaires publics et a l'aide des recherches avancées (*eg: Google Dorks*).
+- 🌍 **Adresse IP** : Identification de l'ISP et de la localisation approximative et d'autre informations connexes.
 - 🕵️‍♂️ **Nom d'utilisateur** : Vérification de la présence d'un compte sur plusieurs réseaux sociaux.
 
 ⚠️ **Cet outil est à des fins éducatives uniquement. Toute utilisation abusive est sous votre propre responsabilité.**
@@ -44,37 +44,53 @@ passive -fn "Jean Dupont"
 ```
 📌 Résultat :
 ```
-First name: Jean
-Last name: Dupont
-Address: 7 rue du Progrès
-75016 Paris
-Number: +33601010101
-Saved in result.txt
+📌 First name: Jean
+📌 Last name: Dupont
+📍 Address: Ottawa, ON, CA
+📞 Number: (514) 381-3391
+
+💾 Saved in result.txt
 ```
 
 #### 🌍 Recherche d'une adresse IP
 ```bash
-passive -ip 127.0.0.1
+passive -ip 8.8.8.8
 ```
 📌 Résultat :
 ```
-ISP: FSociety, S.A.
-City Lat/Lon: (13.731) / (-1.1373)
-Saved in result2.txt
+🌐 IP Address: 8.8.8.8
+🏙️ City: Ashburn
+🌍 Region: Virginia
+🏳️ Country: United States
+🖥️ ISP: Google LLC
+🧭 City Lat/Lon: (39.03)/(-77.5)
+
+💾 Saved in result2.txt
 ```
 
 #### 🕵️‍♂️ Recherche d'un nom d'utilisateur
 ```bash
-passive -u "@user01"
+passive -u "@jeanga7"
 ```
 📌 Résultat :
 ```
-Facebook : yes
-Twitter : yes
-Linkedin : yes
-Instagram : no
-Skype : yes
-Saved in result3.txt
+🎯 Résultat pour 'jeanga7':
+
+✅ Instagram: YES https://www.instagram.com/jeanga7
+✅ GitHub: YES https://github.com/jeanga7
+❌ Reddit: NO https://www.reddit.com/user/jeanga7
+❌ TikTok: NO https://www.tiktok.com/@jeanga7
+✅ Threads: YES https://www.threads.net/@jeanga7
+❌ LinkedIn: NO https://www.linkedin.com/in/jeanga7
+❌ YouTube: NO https://www.youtube.com/@jeanga7
+❌ Facebook: NO (Error: No connection adapters were fo...) https://www.facebook.com/jeanga7
+❌ Medium: NO https://medium.com/@jeanga7
+❌ Snapchat: NO https://www.snapchat.com/add/jeanga7
+❌ StackOverflow: NO https://stackoverflow.com/users/jeanga7
+
+🔍 3 profils found.
+
+💾 Saved in result3.txt
 ```
 
 ---

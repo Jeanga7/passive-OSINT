@@ -58,12 +58,12 @@ def main():
             print("\n\n", result)
             save_result_to_file(result)
         elif args.u:
-            result = search_username(args.u)
+            result = search_username(args.u.lstrip('@'))
             print("\n\n", result)
             save_result_to_file(result)
     else:
         print("Démarrage de l'API...")
-        # Démarrer l'API Flask dans un thread séparé
+
         flask_thread = Thread(target=run_flask)
         flask_thread.start()
 
